@@ -27,16 +27,7 @@ const AddRecipeForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     if (!validate()) return;
-
-    const newRecipe = {
-      title,
-      ingredients,
-      steps,
-    };
-
-    console.log("New Recipe:", newRecipe);
 
     setSuccess("Recipe added successfully!");
     setTitle("");
@@ -46,14 +37,17 @@ const AddRecipeForm = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-6">
-      <div className="w-full max-w-lg bg-white p-6 rounded-xl shadow-lg">
-        <h2 className="text-2xl font-bold mb-4 text-center">
+    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4 md:p-10">
+      <div className="w-full max-w-lg md:max-w-2xl bg-white p-6 md:p-10 rounded-xl shadow-lg">
+        <h2 className="text-2xl font-bold mb-6 text-center">
           Add New Recipe
         </h2>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
+        <form
+          onSubmit={handleSubmit}
+          className="grid grid-cols-1 md:grid-cols-2 gap-6"
+        >
+          <div className="md:col-span-2">
             <label className="block font-medium mb-1">
               Recipe Title
             </label>
@@ -72,12 +66,12 @@ const AddRecipeForm = () => {
 
           <div>
             <label className="block font-medium mb-1">
-              Ingredients (comma separated)
+              Ingredients
             </label>
             <textarea
+              rows="4"
               value={ingredients}
               onChange={(e) => setIngredients(e.target.value)}
-              rows="3"
               className="w-full border rounded-lg p-2"
             ></textarea>
             {errors.ingredients && (
@@ -92,9 +86,9 @@ const AddRecipeForm = () => {
               Preparation Steps
             </label>
             <textarea
+              rows="4"
               value={steps}
               onChange={(e) => setSteps(e.target.value)}
-              rows="4"
               className="w-full border rounded-lg p-2"
             ></textarea>
             {errors.steps && (
@@ -104,18 +98,20 @@ const AddRecipeForm = () => {
             )}
           </div>
 
-          <button
-            type="submit"
-            className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700"
-          >
-            Submit Recipe
-          </button>
+          <div className="md:col-span-2">
+            <button
+              type="submit"
+              className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition"
+            >
+              Submit Recipe
+            </button>
 
-          {success && (
-            <p className="text-green-600 text-center">
-              {success}
-            </p>
-          )}
+            {success && (
+              <p className="text-green-600 text-center mt-2">
+                {success}
+              </p>
+            )}
+          </div>
         </form>
       </div>
     </div>
