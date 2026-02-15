@@ -1,16 +1,22 @@
 import { useParams, Link } from "react-router-dom";
+import { useEffect, useState } from "react";
 import recipesData from "../data.json";
 
 const RecipeDetail = () => {
   const { id } = useParams();
-  const recipe = recipesData.find(
-    (item) => item.id === parseInt(id)
-  );
+  const [recipe, setRecipe] = useState(null);
+
+  useEffect(() => {
+    const selectedRecipe = recipesData.find(
+      (item) => item.id === parseInt(id)
+    );
+    setRecipe(selectedRecipe);
+  }, [id]);
 
   if (!recipe) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <p className="text-xl text-red-600">Recipe not found</p>
+        <p className="text-xl text-red-600">Loading recipe...</p>
       </div>
     );
   }
@@ -38,7 +44,7 @@ const RecipeDetail = () => {
               <h2 className="text-xl font-semibold mb-3">
                 Ingredients
               </h2>
-              <ul className="list-disc list-inside space-y-2 text-gray-700">
+              <ul className="list-disc list-inside space-y-2">
                 {recipe.ingredients.map((item, index) => (
                   <li key={index}>{item}</li>
                 ))}
@@ -49,7 +55,7 @@ const RecipeDetail = () => {
               <h2 className="text-xl font-semibold mb-3">
                 Instructions
               </h2>
-              <ol className="list-decimal list-inside space-y-2 text-gray-700">
+              <ol className="list-decimal list-inside space-y-2">
                 {recipe.instructions.map((step, index) => (
                   <li key={index}>{step}</li>
                 ))}
