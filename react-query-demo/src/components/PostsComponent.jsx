@@ -1,55 +1,44 @@
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 
 const fetchPosts = async () => {
-  const response = await axios.get(
-    "https://jsonplaceholder.typicode.com/posts"
-  );
-  return response.data;
+  const res = await fetch("https://jsonplaceholder.typicode.com/posts");
+  if (!res.ok) throw new Error("Network response was not ok");
+  return res.json();
 };
 
 const PostsComponent = () => {
   const {
-    data,
+    data: posts,
     isLoading,
     isError,
     error,
     refetch,
-    isFetching,
   } = useQuery({
     queryKey: ["posts"],
     queryFn: fetchPosts,
-    staleTime: 1000 * 60 * 5, // cache valid for 5 minutes
-    cacheTime: 1000 * 60 * 10,
+    refetchOnWindowFocus: false,
+    keepPreviousData: true,
   });
 
-  if (isLoading) return <p className="text-blue-600">Loading posts...</p>;
-  if (isError) return <p className="text-red-600">Error: {error.message}</p>;
+  if (isLoading) return <p className="text-center">Loading...</p>;
+  if (isError) return <p className="text-center text-red-500">{error.message}</p>;
 
   return (
-    <div className="p-6 max-w-4xl mx-auto">
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-2xl font-bold">Posts</h2>
-        <button
-          onClick={refetch}
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-        >
-          Refetch Data
-        </button>
-      </div>
+    <div className="max-w-4xl mx-auto p-4">
+      <h2 className="text-2xl font-bold mb-4 text-center">Posts</h2>
 
-      {isFetching && (
-        <p className="text-sm text-gray-500 mb-2">Updating data...</p>
-      )}
+      <button
+        onClick={refetch}
+        className="mb-4 bg-blue-600 text-white px-4 py-2 rounded"
+      >
+        Refetch Posts
+      </button>
 
       <ul className="space-y-3">
-        {data.map((post) => (
-          <li
-            key={post.id}
-            className="border p-4 rounded shadow-sm hover:shadow"
-          >
+        {posts.slice(0, 15).map((post) => (
+          <li key={post.id} className="bg-white p-3 shadow rounded">
             <h3 className="font-semibold">{post.title}</h3>
-            <p className="text-gray-700">{post.body}</p>
+            <p className="text-sm text-gray-700">{post.body}</p>
           </li>
         ))}
       </ul>
