@@ -1,4 +1,5 @@
 import { useState } from "react";
+import FormikForm from "./formikForm";  
 
 const RegistrationForm = () => {
   const [formData, setFormData] = useState({
@@ -91,6 +92,7 @@ const RegistrationForm = () => {
 
         {success && <p className="text-green-600 text-center mt-3">{success}</p>}
       </form>
+      <FormikForm />  
     </div>
   );
 };
